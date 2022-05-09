@@ -1,5 +1,4 @@
 (function initAll() {
-
   const KEYCODE = {
     ShiftLeft: 'ShiftLeft',
     ShiftRight: 'ShiftRight',
@@ -8,16 +7,15 @@
     Delete: 'Delete',
     Enter: 'Enter',
     Tab: 'Tab',
-    
+
   };
 
   const LANGUAGE = {
     en: 'en',
     ru: 'ru',
-    
+
   };
 
-  
   const KEYBOARD = {
     elements: {
       textAria: null,
@@ -402,10 +400,10 @@
     createKeyArea(arrKey, arrFuncKeys) {
       const keyBox = this.createElement({ tag: 'div', tagClass: 'keyboard', tagText: '' });
 
-      for (let i = 0; i < arrKey.length; i++) {
+      for (let i = 0; i < arrKey.length; i += 1) {
         const keysRow = this.createElement({ tag: 'div', tagClass: 'keys-row', tagText: '' });
 
-        for (let j = 0; j < arrKey[i].length; j++) {
+        for (let j = 0; j < arrKey[i].length; j += 1) {
           const key = arrKey[i][j];
           let classesStr = `key ${key}`.toLowerCase();
 
@@ -428,35 +426,31 @@
       this.setLayout({ query: '.key:not(.key--function)', language: this.inputField.languageToggle, shift: 'shift' });
     },
 
-
     setLayout({ query, language, shift }) {
       const arrKey = this.elements.keyBox.querySelectorAll(query);
-      for (let i = 0; i < arrKey.length; i++) {
+      for (let i = 0; i < arrKey.length; i += 1) {
         const elem = arrKey[i];
         const keySymbol = this.language[language][shift][elem.dataset.keyCode];
         elem.innerHTML = keySymbol;
       }
     },
 
-    
     setLangLayout(languageToggle) {
       this.setLayout({ query: '.key', language: languageToggle, shift: 'lowerCase' });
       this.inputField.languageToggle = languageToggle;
       localStorage.setItem('virtualKeyboardLang', languageToggle);
     },
 
-             
     setCapsLock() {
       const arrKey = this.elements.keyBox.querySelectorAll('.key:not(.key--function)');
 
-      for (let i = 0; i < arrKey.length; i++) {
+      for (let i = 0; i < arrKey.length; i += 1) {
         const element = arrKey[i];
         const keySymbol = element.innerHTML.toUpperCase();
         element.innerHTML = keySymbol;
       }
     },
 
-   
     switchLangLayout() {
       if (this.inputField.languageToggle === LANGUAGE.en) {
         this.inputField.languageToggle = LANGUAGE.ru;
@@ -466,7 +460,6 @@
       this.setLangLayout(this.inputField.languageToggle);
     },
 
-    
     typeChar(char) {
       const text = this.elements.textAria.value;
       const start = this.elements.textAria.selectionStart;
@@ -494,7 +487,6 @@
       this.elements.textAria.focus();
     },
 
-    
     typeDelete() {
       const text = this.elements.textAria.value;
       const start = this.elements.textAria.selectionStart;
@@ -548,11 +540,10 @@
         case KEYCODE.CapsLock:
           this.toggleCapsLock();
           break;
-          
+        default:
       }
     },
 
-    
     handleEvent(event) {
       const element = this.elements.keyBox.querySelector(`button[data-key-code=${event.code}]`);
       if (!element) return;
@@ -567,7 +558,7 @@
           if (this.elements.functionKeys.includes(element.dataset.keyCode)) {
             this.handleFunctionKeys(element.dataset.keyCode);
           }
-          if ((event.ctrlKey && event.altKey)) { 
+          if ((event.ctrlKey && event.altKey)) {
             this.switchLangLayout();
           }
           event.preventDefault();
@@ -579,45 +570,35 @@
             this.setShiftUpLayout();
           }
           break;
-          
+        default:
       }
     },
 
-    
     initAll() {
-      
       if (!(Object.prototype.hasOwnProperty.call(localStorage, 'virtualKeyboardLang'))) {
         localStorage.setItem('virtualKeyboardLang', 'en');
       }
       this.inputField.languageToggle = localStorage.getItem('virtualKeyboardLang');
 
-     
       this.elements.title = this.createElement({ tag: 'h1', tagClass: 'title', tagText: 'RSS Virtual Keyboard' });
       document.body.append(this.elements.title);
 
-      
       this.elements.textAria = this.createElement({ tag: 'textarea', tagClass: 'textarea', tagText: '' });
       document.body.append(this.elements.textAria);
-     
 
-      
       this.elements.keyBox = this.createKeyArea(this.elements.keys, this.elements.functionKeys);
       this.setLangLayout(this.inputField.languageToggle);
       document.body.append(this.elements.keyBox);
 
-      
       this.elements.title = this.createElement({ tag: 'p', tagClass: 'legend', tagText: ' Keyboard was created  in OS Windows 10' });
       document.body.append(this.elements.title);
       this.elements.title = this.createElement({ tag: 'p', tagClass: 'legend', tagText: 'Ctrl + Alt to switch EN/RU' });
       document.body.append(this.elements.title);
 
-      
       window.addEventListener('keydown', (event) => this.handleEvent(event));
 
-      
       window.addEventListener('keyup', (event) => this.handleEvent(event));
 
-      
       this.elements.keyBox.addEventListener('mousedown', (event) => {
         const { target } = event;
 
@@ -631,7 +612,6 @@
         }
       });
 
-      
       this.elements.keyBox.addEventListener('mouseup', (event) => {
         const { target } = event;
 
@@ -649,6 +629,4 @@
   window.addEventListener('DOMContentLoaded', () => {
     KEYBOARD.initAll();
   });
-
-    
 }());
